@@ -1,0 +1,10 @@
+# dependencies
+/node_modules
+
+# next.js
+/.next/
+
+yarn.lock
+
+# local env files
+.env
