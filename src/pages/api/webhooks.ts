@@ -22,11 +22,15 @@ export const config = {
     }
 }
 
+const relevantEvents = new Set([
+    'checkout.session.completed'
+])
+
 export default async(req: NextApiRequest, res: NextApiResponse) => {
     if(req.method === 'POST'){
         const buf = await buffer(req)
         const secret = req.headers['stripe-signature']
-
+        console.log('AQUI')
         let event: Stripe.Event
 
         try{
@@ -35,7 +39,22 @@ export default async(req: NextApiRequest, res: NextApiResponse) => {
             return res.status(400).send('webhook error')
         }
 
-        res.status(200).json({ok: true})
+        const {type} = event
+    
+        if(relevantEvents.has(type)){
+            try{
+                switch (type) {
+                    case 'checkout.session.complete' : 
+                    break;
+                default:
+                    throw new Error('unhandled event.')
+                }
+            }catch(err){
+                return res.json({error: 'webhook handler failed.'})
+            }
+        }
+
+        res.json({received: true})
     }else {
         res.setHeader('Allow', 'POST')
         res.status(405).end('Method not allowed')
