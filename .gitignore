@@ -6,5 +6,11 @@
 
 yarn.lock
 
+/.slicemachine
+/.swc
+/customtypes
+/slices
+
+sm.json
 # local env files
 .env
